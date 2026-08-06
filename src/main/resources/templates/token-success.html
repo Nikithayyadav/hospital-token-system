@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Token Generated | Yashoda Hospitals
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+</head>
+
+<body class="receipt-page">
+
+<div class="receipt-container">
+
+    <div class="success-check">
+        ✓
+    </div>
+
+    <h1>
+        Token Generated
+    </h1>
+
+    <p class="receipt-subtitle">
+        Patient has been added to the
+        consultation waiting queue.
+    </p>
+
+
+    <div class="hospital-token">
+
+        <div class="token-hospital-header">
+
+            <h2>
+                Yashoda Hospitals
+            </h2>
+
+            <p>
+                Patient Token & Queue Management
+            </p>
+
+        </div>
+
+
+        <div class="big-token-number"
+             th:text="${token.tokenNumber}">
+
+            A-001
+
+        </div>
+
+
+        <div class="token-status-label">
+
+            <span>
+                WAITING
+            </span>
+
+        </div>
+
+
+        <div class="receipt-details">
+
+            <div>
+
+                <span>
+                    Patient
+                </span>
+
+                <strong
+                        th:text="${token.patient.name}">
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Patient ID
+                </span>
+
+                <strong
+                        th:text="${token.patient.patientId}">
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Department
+                </span>
+
+                <strong
+                        th:text="${token.department.name}">
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Doctor
+                </span>
+
+                <strong
+                        th:text="${token.doctor.name}">
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Room
+                </span>
+
+                <strong
+                        th:text="${token.doctor.roomNumber}">
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Token Type
+                </span>
+
+                <strong
+                        th:text="${token.tokenType}">
+                </strong>
+
+            </div>
+
+
+            <div class="receipt-full">
+
+                <span>
+                    Reason for Visit
+                </span>
+
+                <strong
+                        th:text="${token.reasonForVisit}">
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="token-instruction">
+
+            Please wait until your token number
+            is called at the assigned consultation room.
+
+        </div>
+
+    </div>
+
+
+    <div class="receipt-actions">
+
+        <button
+                onclick="window.print()"
+                class="secondary-button">
+
+            Print Token
+
+        </button>
+
+
+        <a th:href="@{/tokens/generate}"
+           class="secondary-button">
+
+            Generate Another
+
+        </a>
+
+
+        <a th:href="@{/dashboard}"
+           class="primary-button">
+
+            Dashboard
+
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

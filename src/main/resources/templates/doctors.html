@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Doctor Availability | Yashoda Hospitals</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <h2>✚ Yashoda Hospitals</h2>
+
+            <p>Reception & Patient Services</p>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">OVERVIEW</div>
+
+            <a th:href="@{/dashboard}"
+               class="menu-item">
+
+                ▣ Dashboard
+
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                PATIENT SERVICES
+            </div>
+
+            <a th:href="@{/patients/register}"
+               class="menu-item">
+
+                ＋ Register Patient
+
+            </a>
+
+            <a th:href="@{/patients}"
+               class="menu-item">
+
+                ⌕ Search Patient
+
+            </a>
+
+            <a th:href="@{/patients}"
+               class="menu-item">
+
+                ☷ Patient Directory
+
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                TOKEN SERVICES
+            </div>
+
+            <a th:href="@{/tokens/generate}"
+               class="menu-item">
+
+                🎫 Generate Token
+
+            </a>
+
+            <a th:href="@{/tokens/queue}"
+               class="menu-item">
+
+                ◷ Queue Management
+
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                CLINICAL
+            </div>
+
+            <a th:href="@{/doctors}"
+               class="menu-item active">
+
+                ♟ Doctor Availability
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+
+                <h3>
+                    Doctor Availability
+                </h3>
+
+            </div>
+
+            <a th:href="@{/dashboard}"
+               class="logout-button">
+
+                ← Dashboard
+
+            </a>
+
+        </header>
+
+
+        <div class="content">
+
+            <div class="page-heading">
+
+                <div>
+
+                    <div class="page-breadcrumb">
+                        Clinical / Doctor Availability
+                    </div>
+
+                    <h1>
+                        Doctors
+                    </h1>
+
+                    <p>
+                        View consultation availability,
+                        queue load and daily token capacity.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div th:if="${param.updated}"
+                 class="success-alert">
+
+                Doctor status updated successfully.
+
+            </div>
+
+
+            <div class="doctor-grid">
+
+                <div class="doctor-card"
+                     th:each="doctor : ${doctors}">
+
+                    <div class="doctor-card-top">
+
+                        <div class="doctor-avatar">
+                            DR
+                        </div>
+
+
+                        <div>
+
+                            <h3 th:text="${doctor.name}">
+                                Doctor
+                            </h3>
+
+                            <p th:text="${doctor.specialization}">
+                                Specialization
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="doctor-department">
+
+                        <span>Department</span>
+
+                        <strong
+                                th:text="${doctor.department.name}">
+                        </strong>
+
+                    </div>
+
+
+                    <div class="doctor-details">
+
+                        <div>
+
+                            <span>Room</span>
+
+                            <strong
+                                    th:text="${doctor.roomNumber}">
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>Waiting</span>
+
+                            <strong
+                                    th:text="${doctor.currentWaitingCount}">
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>Tokens Today</span>
+
+                            <strong>
+
+                                <span
+                                        th:text="${doctor.tokensIssuedToday}">
+                                </span>
+
+                                /
+
+                                <span
+                                        th:text="${doctor.dailyTokenLimit}">
+                                </span>
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="consultation-time">
+
+                        Consultation:
+                        <strong
+                                th:text="${doctor.consultationStartTime}">
+                        </strong>
+
+                        —
+
+                        <strong
+                                th:text="${doctor.consultationEndTime}">
+                        </strong>
+
+                    </div>
+
+
+                    <div class="doctor-status-row">
+
+                        <div class="status-pill"
+                             th:classappend="${doctor.status.name() == 'AVAILABLE'}
+                                ? ' available-status'
+                                : (${doctor.status.name() == 'IN_CONSULTATION'}
+                                ? ' consultation-status'
+                                : ' unavailable-status')">
+
+                            ●
+
+                            <span
+                                    th:text="${#strings.replace(doctor.status.name(), '_', ' ')}">
+                            </span>
+
+                        </div>
+
+
+                        <form
+                                th:action="@{/doctors/{id}/status(id=${doctor.id})}"
+                                method="post">
+
+                            <select
+                                    name="status"
+                                    class="status-select"
+                                    onchange="this.form.submit()">
+
+                                <option
+                                        th:each="status : ${statuses}"
+                                        th:value="${status}"
+                                        th:text="${#strings.replace(status.name(), '_', ' ')}"
+                                        th:selected="${status == doctor.status}">
+                                </option>
+
+                            </select>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

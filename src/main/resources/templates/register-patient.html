@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register Patient | Yashoda Hospitals</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <h2>✚ Yashoda Hospitals</h2>
+            <p>Reception & Patient Services</p>
+        </div>
+
+        <div class="menu-section">
+
+            <div class="menu-title">OVERVIEW</div>
+
+            <a th:href="@{/dashboard}"
+               class="menu-item">
+                ▣ Dashboard
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">PATIENT SERVICES</div>
+
+            <a th:href="@{/patients/register}"
+               class="menu-item active">
+                ＋ Register Patient
+            </a>
+
+            <a th:href="@{/patients}"
+               class="menu-item">
+                ⌕ Search Patient
+            </a>
+
+            <a th:href="@{/patients}"
+               class="menu-item">
+                ☷ Patient Directory
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">TOKEN SERVICES</div>
+
+            <a th:href="@{/tokens/generate}"
+               class="menu-item">
+                🎫 Generate Token
+            </a>
+
+            <a th:href="@{/tokens/queue}"
+               class="menu-item">
+                ◷ Queue Management
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">CLINICAL</div>
+
+            <a th:href="@{/doctors}"
+               class="menu-item">
+                ♟ Doctors
+            </a>
+
+            <a th:href="@{/history}"
+               class="menu-item">
+                ▤ Patient History
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div>
+                <h3>Patient Registration</h3>
+            </div>
+
+            <a th:href="@{/dashboard}"
+               class="logout-button">
+                ← Dashboard
+            </a>
+
+        </header>
+
+
+        <div class="content">
+
+            <!-- PAGE HEADING -->
+            <div class="page-heading">
+
+                <div>
+
+                    <div class="page-breadcrumb">
+                        Patient Services / Registration
+                    </div>
+
+                    <h1>Register New Patient</h1>
+
+                    <p>
+                        Create a patient record before generating
+                        a consultation token.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- PATIENT FORM -->
+            <div class="patient-form-card">
+
+                <div class="form-card-header">
+
+                    <div>
+
+                        <h2>Patient Information</h2>
+
+                        <p>
+                            Enter the patient's demographic
+                            and contact information.
+                        </p>
+
+                    </div>
+
+                    <div class="new-patient-badge">
+                        NEW PATIENT
+                    </div>
+
+                </div>
+
+
+                <form th:action="@{/patients/register}"
+                      th:object="${patient}"
+                      method="post">
+
+
+                    <!-- =========================
+                         PERSONAL DETAILS
+                    ========================== -->
+
+                    <div class="form-section-title">
+                        Personal Details
+                    </div>
+
+
+                    <div class="hospital-form-grid">
+
+
+                        <!-- NAME -->
+                        <div class="form-field full-field">
+
+                            <label>
+                                Patient Full Name
+                                <span>*</span>
+                            </label>
+
+                            <input
+                                    type="text"
+                                    th:field="*{name}"
+                                    placeholder="Enter patient's full name"
+                                    required>
+
+                        </div>
+
+
+                        <!-- AGE -->
+                        <div class="form-field">
+
+                            <label>
+                                Age
+                                <span>*</span>
+                            </label>
+
+                            <input
+                                    type="number"
+                                    th:field="*{age}"
+                                    placeholder="Enter age"
+                                    min="0"
+                                    max="120"
+                                    required>
+
+                        </div>
+
+
+                        <!-- GENDER -->
+                        <div class="form-field">
+
+                            <label>
+                                Gender
+                                <span>*</span>
+                            </label>
+
+                            <select
+                                    th:field="*{gender}"
+                                    required>
+
+                                <option value="">
+                                    Select gender
+                                </option>
+
+                                <option value="Male">
+                                    Male
+                                </option>
+
+                                <option value="Female">
+                                    Female
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- BLOOD GROUP -->
+                        <div class="form-field">
+
+                            <label>
+                                Blood Group
+                            </label>
+
+                            <select th:field="*{bloodGroup}">
+
+                                <option value="">
+                                    Select blood group
+                                </option>
+
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =========================
+                         CONTACT INFORMATION
+                    ========================== -->
+
+                    <div class="form-section-title second-section">
+                        Contact Information
+                    </div>
+
+
+                    <div class="hospital-form-grid">
+
+
+                        <!-- MOBILE -->
+                        <div class="form-field">
+
+                            <label>
+                                Mobile Number
+                                <span>*</span>
+                            </label>
+
+                            <input
+                                    type="tel"
+                                    th:field="*{phone}"
+                                    placeholder="10-digit mobile number"
+                                    pattern="[0-9]{10}"
+                                    maxlength="10"
+                                    required>
+
+                        </div>
+
+
+                        <!-- ADDRESS -->
+                        <div class="form-field full-field">
+
+                            <label>
+                                Address
+                            </label>
+
+                            <textarea
+                                    th:field="*{address}"
+                                    placeholder="Enter residential address"
+                                    rows="4"></textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =========================
+                         FORM ACTIONS
+                    ========================== -->
+
+                    <div class="form-actions">
+
+                        <a th:href="@{/dashboard}"
+                           class="secondary-button">
+                            Cancel
+                        </a>
+
+                        <button
+                                type="submit"
+                                class="primary-button">
+
+                            Register Patient
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

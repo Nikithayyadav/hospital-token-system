@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Staff Login | Yashoda Hospitals</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="login-page">
+
+    <!-- =========================================
+         YASHODA HOSPITALS BRANDING
+         ========================================= -->
+
+    <section class="login-brand">
+
+        <div class="brand-icon">
+            ✚
+        </div>
+
+        <div class="hospital-brand-name">
+            YASHODA HOSPITALS
+        </div>
+
+        <h1>
+            Reception &amp;<br>
+            Patient Services
+        </h1>
+
+        <p>
+            Integrated patient registration, consultation token,
+            doctor availability and queue management system for
+            hospital front-desk operations.
+        </p>
+
+
+        <div class="brand-features">
+
+            <div class="brand-feature">
+                ✓ Patient Registration
+            </div>
+
+            <div class="brand-feature">
+                ✓ Consultation Tokens
+            </div>
+
+            <div class="brand-feature">
+                ✓ Emergency Priority
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         STAFF LOGIN
+         ========================================= -->
+
+    <section class="login-section">
+
+        <div class="login-card">
+
+            <div class="login-hospital-label">
+                YASHODA HOSPITALS
+            </div>
+
+            <h2>
+                Staff Login
+            </h2>
+
+            <p class="login-subtitle">
+                Reception &amp; Patient Services
+            </p>
+
+            <p class="login-description">
+                Sign in with your authorized staff credentials
+                to access the reception dashboard.
+            </p>
+
+
+            <!-- LOGIN ERROR -->
+
+            <div th:if="${error}"
+                 class="error-message"
+                 th:text="${error}">
+            </div>
+
+
+            <!-- LOGIN FORM -->
+
+            <form th:action="@{/login}"
+                  method="post">
+
+                <div class="form-group">
+
+                    <label for="username">
+                        Staff Username
+                    </label>
+
+                    <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Enter staff username"
+                            autocomplete="username"
+                            required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter password"
+                            autocomplete="current-password"
+                            required>
+
+                </div>
+
+
+                <button
+                        type="submit"
+                        class="login-button">
+
+                    Sign In
+
+                </button>
+
+            </form>
+
+
+            <div class="login-footer">
+
+                Authorized Yashoda Hospitals Staff Access
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+</html>

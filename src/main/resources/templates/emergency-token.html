@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Emergency Token | Yashoda Hospitals
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <h2>✚ Yashoda Hospitals</h2>
+
+            <p>
+                Reception & Patient Services
+            </p>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                OVERVIEW
+            </div>
+
+            <a th:href="@{/dashboard}"
+               class="menu-item">
+
+                ▣ Dashboard
+
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                PATIENT SERVICES
+            </div>
+
+            <a th:href="@{/patients/register}"
+               class="menu-item">
+
+                ＋ Register Patient
+
+            </a>
+
+            <a th:href="@{/patients}"
+               class="menu-item">
+
+                ⌕ Search Patient
+
+            </a>
+
+            <a th:href="@{/patients}"
+               class="menu-item">
+
+                ☷ Patient Directory
+
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                TOKEN SERVICES
+            </div>
+
+            <a th:href="@{/tokens/generate}"
+               class="menu-item">
+
+                🎫 Generate Token
+
+            </a>
+
+            <a th:href="@{/tokens/emergency}"
+               class="menu-item active">
+
+                ⚠ Emergency Token
+
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                QUEUE MANAGEMENT
+            </div>
+
+            <a th:href="@{/tokens/queue}"
+               class="menu-item">
+
+                ◷ Queue Management
+
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                CLINICAL
+            </div>
+
+            <a th:href="@{/doctors}"
+               class="menu-item">
+
+                ♟ Doctor Availability
+
+            </a>
+
+            <a th:href="@{/history}"
+               class="menu-item">
+
+                ▤ Patient History
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <h3>
+                Emergency Token
+            </h3>
+
+            <a th:href="@{/dashboard}"
+               class="logout-button">
+
+                ← Dashboard
+
+            </a>
+
+        </header>
+
+
+        <div class="content">
+
+            <div class="page-heading">
+
+                <div>
+
+                    <div class="page-breadcrumb">
+                        Token Services / Emergency Token
+                    </div>
+
+                    <h1>
+                        Generate Emergency Token
+                    </h1>
+
+                    <p>
+                        Register a priority consultation
+                        token for an emergency patient.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ERROR -->
+
+            <div th:if="${error}"
+                 class="token-error">
+
+                <strong>
+                    Emergency token could not be generated.
+                </strong>
+
+                <span th:text="${error}">
+                </span>
+
+            </div>
+
+
+            <div class="token-workspace">
+
+
+                <!-- FORM -->
+
+                <div class="token-form-card">
+
+                    <div class="form-card-header">
+
+                        <div>
+
+                            <h2>
+                                Emergency Consultation
+                            </h2>
+
+                            <p>
+                                Enter patient and priority information.
+                            </p>
+
+                        </div>
+
+                        <div class="emergency-token-badge">
+                            EMERGENCY
+                        </div>
+
+                    </div>
+
+
+                    <form th:action="@{/tokens/emergency}"
+                          method="post">
+
+
+                        <!-- PATIENT -->
+
+                        <div class="form-section-title">
+                            Patient
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>
+                                Registered Patient *
+                            </label>
+
+                            <select name="patientId"
+                                    required>
+
+                                <option value="">
+                                    Select patient
+                                </option>
+
+                                <option
+                                        th:each="patient : ${patients}"
+                                        th:value="${patient.id}"
+                                        th:text="${patient.patientId
+                                        + ' — '
+                                        + patient.name
+                                        + ' — '
+                                        + patient.phone}">
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- DEPARTMENT -->
+
+                        <div class="form-section-title second-section">
+                            Department
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>
+                                Department
+                            </label>
+
+                            <select id="departmentSelect"
+                                    onchange="filterEmergencyDepartment()">
+
+                                <option value="">
+                                    All Departments
+                                </option>
+
+                                <option
+                                        th:each="department : ${departments}"
+                                        th:value="${department.id}"
+                                        th:text="${department.name}"
+                                        th:selected="${selectedDepartment != null
+                                        && selectedDepartment == department.id}">
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- DOCTOR -->
+
+                        <div class="form-section-title second-section">
+                            Doctor Assignment
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>
+                                Select Doctor *
+                            </label>
+
+                            <select name="doctorId"
+                                    required>
+
+                                <option value="">
+                                    Select doctor
+                                </option>
+
+                                <option
+                                        th:each="doctor : ${doctors}"
+                                        th:value="${doctor.id}"
+                                        th:text="${doctor.name
+                                        + ' — '
+                                        + doctor.specialization
+                                        + ' — '
+                                        + doctor.status
+                                        + ' — Room '
+                                        + doctor.roomNumber}">
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- PRIORITY -->
+
+                        <div class="form-section-title second-section">
+                            Emergency Priority
+                        </div>
+
+
+                        <div class="emergency-priority-options">
+
+                            <label class="priority-option critical-priority">
+
+                                <input type="radio"
+                                       name="priority"
+                                       value="CRITICAL"
+                                       required>
+
+                                <div>
+
+                                    <strong>
+                                        Critical
+                                    </strong>
+
+                                    <span>
+                                        Immediate priority
+                                    </span>
+
+                                </div>
+
+                            </label>
+
+
+                            <label class="priority-option high-priority">
+
+                                <input type="radio"
+                                       name="priority"
+                                       value="HIGH">
+
+                                <div>
+
+                                    <strong>
+                                        High
+                                    </strong>
+
+                                    <span>
+                                        High-priority queue
+                                    </span>
+
+                                </div>
+
+                            </label>
+
+
+                            <label class="priority-option moderate-priority">
+
+                                <input type="radio"
+                                       name="priority"
+                                       value="MODERATE">
+
+                                <div>
+
+                                    <strong>
+                                        Moderate
+                                    </strong>
+
+                                    <span>
+                                        Stable emergency case
+                                    </span>
+
+                                </div>
+
+                            </label>
+
+                        </div>
+
+
+                        <!-- REASON -->
+
+                        <div class="form-section-title second-section">
+                            Emergency Information
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>
+                                Reason / Emergency Notes *
+                            </label>
+
+                            <textarea
+                                    name="reasonForVisit"
+                                    rows="5"
+                                    maxlength="500"
+                                    placeholder="Enter emergency reason or presenting complaint"
+                                    required>
+                            </textarea>
+
+                        </div>
+
+
+                        <div class="form-actions">
+
+                            <a th:href="@{/dashboard}"
+                               class="secondary-button">
+
+                                Cancel
+
+                            </a>
+
+                            <button type="submit"
+                                    class="emergency-button">
+
+                                ⚠ Generate Emergency Token
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <!-- INFORMATION -->
+
+                <div class="token-info-panel emergency-info-panel">
+
+                    <div class="info-panel-icon">
+                        ⚠
+                    </div>
+
+                    <h3>
+                        Emergency Queue
+                    </h3>
+
+                    <p>
+                        Emergency tokens are ordered according
+                        to the priority selected for the patient.
+                    </p>
+
+
+                    <div class="priority-guide">
+
+                        <div class="priority-guide-row">
+
+                            <span class="priority-number">
+                                1
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    CRITICAL
+                                </strong>
+
+                                <p>
+                                    Highest software queue priority
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="priority-guide-row">
+
+                            <span class="priority-number">
+                                2
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    HIGH
+                                </strong>
+
+                                <p>
+                                    High queue priority
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="priority-guide-row">
+
+                            <span class="priority-number">
+                                3
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    MODERATE
+                                </strong>
+
+                                <p>
+                                    Standard emergency priority
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="token-rule">
+
+                        <span>
+                            Data Structure
+                        </span>
+
+                        <strong>
+                            PriorityQueue
+                        </strong>
+
+                    </div>
+
+
+                    <div class="token-rule">
+
+                        <span>
+                            Tie Break
+                        </span>
+
+                        <strong>
+                            Earlier Token
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    function filterEmergencyDepartment() {
+
+        const departmentId =
+            document.getElementById(
+                "departmentSelect"
+            ).value;
+
+        if (departmentId === "") {
+
+            window.location.href =
+                "/tokens/emergency";
+
+        } else {
+
+            window.location.href =
+                "/tokens/emergency?departmentId="
+                + departmentId;
+        }
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Patient Directory | Yashoda Hospitals</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <h2>✚ Yashoda Hospitals</h2>
+            <p>Reception & Patient Services</p>
+        </div>
+
+        <div class="menu-section">
+
+            <div class="menu-title">OVERVIEW</div>
+
+            <a th:href="@{/dashboard}"
+               class="menu-item">
+                ▣ Dashboard
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                PATIENT SERVICES
+            </div>
+
+            <a th:href="@{/patients/register}"
+               class="menu-item">
+                ＋ Register Patient
+            </a>
+
+            <a th:href="@{/patients}"
+               class="menu-item active">
+                ⌕ Search Patient
+            </a>
+
+            <a th:href="@{/patients}"
+               class="menu-item">
+                ☷ Patient Directory
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <h3>Patient Directory</h3>
+
+            <a th:href="@{/patients/register}"
+               class="primary-button">
+
+                + Register Patient
+
+            </a>
+
+        </header>
+
+
+        <div class="content">
+
+            <div class="page-heading">
+
+                <div>
+
+                    <div class="page-breadcrumb">
+                        Patient Services / Patient Directory
+                    </div>
+
+                    <h1>Patients</h1>
+
+                    <p>
+                        Search and manage registered hospital patients.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div th:if="${param.registered}"
+                 class="success-alert">
+
+                Patient registered successfully.
+                A unique Patient ID has been generated.
+
+            </div>
+
+
+            <div th:if="${param.updated}"
+                 class="success-alert">
+
+                Patient information updated successfully.
+
+            </div>
+
+
+            <div th:if="${param.deleted}"
+                 class="success-alert">
+
+                Patient record deactivated successfully.
+
+            </div>
+
+
+            <div class="directory-toolbar">
+
+                <form th:action="@{/patients}"
+                      method="get"
+                      class="patient-search">
+
+                    <input
+                            type="text"
+                            name="search"
+                            th:value="${search}"
+                            placeholder="Search by Patient ID, name or mobile number">
+
+                    <button
+                            type="submit"
+                            class="search-button">
+
+                        Search
+
+                    </button>
+
+                </form>
+
+
+                <div class="sort-actions">
+
+                    <a th:href="@{/patients(sort='name')}"
+                       class="sort-button">
+                        A–Z Name
+                    </a>
+
+                    <a th:href="@{/patients(sort='id')}"
+                       class="sort-button">
+                        Patient ID
+                    </a>
+
+                    <a th:href="@{/patients}"
+                       class="sort-button">
+                        Clear
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="patient-table-card">
+
+                <table class="patient-table"
+                       th:if="${!patients.isEmpty()}">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>PATIENT ID</th>
+                        <th>PATIENT NAME</th>
+                        <th>AGE / GENDER</th>
+                        <th>MOBILE</th>
+                        <th>BLOOD GROUP</th>
+                        <th>ACTIONS</th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    <tr th:each="patient : ${patients}">
+
+                        <td class="patient-id"
+                            th:text="${patient.patientId}">
+                        </td>
+
+
+                        <td class="patient-name"
+                            th:text="${patient.name}">
+                        </td>
+
+
+                        <td>
+
+                            <span th:text="${patient.age}"></span>
+                            /
+                            <span th:text="${patient.gender}"></span>
+
+                        </td>
+
+
+                        <td th:text="${patient.phone}">
+                        </td>
+
+
+                        <td>
+
+                            <span th:text="${patient.bloodGroup != null && !patient.bloodGroup.isEmpty()
+                                ? patient.bloodGroup : '—'}">
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="table-actions">
+
+                                <a th:href="@{/patients/edit/{id}(id=${patient.id})}"
+                                   class="edit-button">
+
+                                    Edit
+
+                                </a>
+
+
+                                <form th:action="@{/patients/delete/{id}(id=${patient.id})}"
+                                      method="post"
+                                      onsubmit="return confirm('Deactivate this patient record?');">
+
+                                    <button
+                                            type="submit"
+                                            class="delete-button">
+
+                                        Delete
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+
+                <div th:if="${patients.isEmpty()}"
+                     class="empty-state">
+
+                    <h3>No patients found</h3>
+
+                    <p>
+                        Register a new patient or try another search.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

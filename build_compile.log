@@ -1,0 +1,23 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------< com.hospital:hospital-token-system >-----------------
+[INFO] Building hospital-token-system 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ hospital-token-system ---
+[INFO] Deleting E:\proficon\hospital-token-system\target
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ hospital-token-system ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 11 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ hospital-token-system ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 36 source files with javac [debug parameters release 17] to target\classes
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  45.549 s
+[INFO] Finished at: 2026-08-05T17:30:39+05:30
+[INFO] ------------------------------------------------------------------------

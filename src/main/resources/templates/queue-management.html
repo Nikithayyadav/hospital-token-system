@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue Management | Yashoda Hospitals</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <h2>✚ Yashoda Hospitals</h2>
+            <p>Reception & Patient Services</p>
+        </div>
+
+        <div class="menu-section">
+            <div class="menu-title">OVERVIEW</div>
+            <a th:href="@{/dashboard}" class="menu-item">▣ Dashboard</a>
+        </div>
+
+        <div class="menu-section">
+            <div class="menu-title">PATIENT SERVICES</div>
+
+            <a th:href="@{/patients/register}" class="menu-item">
+                ＋ Register Patient
+            </a>
+
+            <a th:href="@{/patients}" class="menu-item">
+                ⌕ Search Patient
+            </a>
+
+            <a th:href="@{/patients}" class="menu-item">
+                ☷ Patient Directory
+            </a>
+
+        </div>
+
+        <div class="menu-section">
+            <div class="menu-title">TOKEN SERVICES</div>
+
+            <a th:href="@{/tokens/generate}" class="menu-item">
+                🎫 Generate Token
+            </a>
+
+            <a th:href="@{/tokens/queue}" class="menu-item active">
+                ◷ Queue Management
+            </a>
+
+        </div>
+
+        <div class="menu-section">
+            <div class="menu-title">CLINICAL</div>
+
+            <a th:href="@{/doctors}" class="menu-item">
+                ♟ Doctor Availability
+            </a>
+
+        </div>
+
+        <div class="menu-section account-menu">
+            <div class="menu-title">ACCOUNT</div>
+
+            <a th:href="@{/logout}" class="menu-item">
+                ↪ Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+                <h3>Queue Management</h3>
+            </div>
+
+            <a th:href="@{/dashboard}" class="logout-button">
+                ← Dashboard
+            </a>
+
+        </header>
+
+
+        <div class="content">
+
+            <div class="page-heading">
+
+                <div>
+
+                    <div class="page-breadcrumb">
+                        Reception / Queue Management
+                    </div>
+
+                    <h1>Patient Queue Management</h1>
+
+                    <p>
+                        View, monitor and manage today's consultation queues.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="queue-panel">
+
+                <!-- ================= EMERGENCY ================= -->
+
+                <h2>🚨 Emergency Queue</h2>
+
+                <table class="token-table">
+
+                    <thead>
+
+                    <tr>
+                        <th>Token</th>
+                        <th>Patient</th>
+                        <th>Doctor</th>
+                        <th>Department</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:if="${#lists.isEmpty(emergencyQueue)}">
+                        <td colspan="7" class="empty-queue">
+                            No emergency patients waiting.
+                        </td>
+                    </tr>
+
+                    <tr th:each="token : ${emergencyQueue}">
+
+                        <td th:text="${token.tokenNumber}"></td>
+                        <td th:text="${token.patient.name}"></td>
+                        <td th:text="${token.doctor.name}"></td>
+                        <td th:text="${token.department.name}"></td>
+                        <td th:text="${token.queuePriority}"></td>
+                        <td>
+                            <span class="status-badge"
+                                  th:text="${token.status}">
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <form
+                                    th:if="${token.status.name()=='WAITING'}"
+                                    th:action="@{/tokens/doctor/{id}/call-next(id=${token.doctor.id})}"
+                                    method="post"
+                                    style="display:inline">
+
+                                <button class="primary-button small">
+                                    Call Next
+                                </button>
+
+                            </form>
+
+                            <form
+                                    th:if="${token.status.name()=='CALLED'}"
+                                    th:action="@{/tokens/{id}/start(id=${token.id})}"
+                                    method="post"
+                                    style="display:inline">
+
+                                <button class="primary-button small">
+                                    Start
+                                </button>
+
+                            </form>
+
+                            <form
+                                    th:if="${token.status.name()=='IN_CONSULTATION'}"
+                                    th:action="@{/tokens/{id}/complete(id=${token.id})}"
+                                    method="post"
+                                    style="display:inline">
+
+                                <button class="primary-button small">
+                                    Complete
+                                </button>
+
+                            </form>
+
+                            <form
+                                    th:if="${token.status.name()!='COMPLETED' && token.status.name()!='CANCELLED'}"
+                                    th:action="@{/tokens/{id}/cancel(id=${token.id})}"
+                                    method="post"
+                                    style="display:inline">
+
+                                <button class="secondary-button small">
+                                    Cancel
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+
+
+                <!-- ================= NORMAL ================= -->
+
+                <h2>🩺 Normal Queue</h2>
+
+                <table class="token-table">
+
+                    <thead>
+
+                    <tr>
+                        <th>Token</th>
+                        <th>Patient</th>
+                        <th>Doctor</th>
+                        <th>Department</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:if="${#lists.isEmpty(waitingQueue)}">
+
+                        <td colspan="7" class="empty-queue">
+                            No patients in waiting queue.
+                        </td>
+
+                    </tr>
+
+                    <tr th:each="token : ${waitingQueue}">
+
+                        <td th:text="${token.tokenNumber}"></td>
+                        <td th:text="${token.patient.name}"></td>
+                        <td th:text="${token.doctor.name}"></td>
+                        <td th:text="${token.department.name}"></td>
+                        <td th:text="${token.tokenType}"></td>
+
+                        <td>
+                            <span class="status-badge"
+                                  th:text="${token.status}">
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <form
+                                    th:if="${token.status.name()=='WAITING'}"
+                                    th:action="@{/tokens/doctor/{id}/call-next(id=${token.doctor.id})}"
+                                    method="post"
+                                    style="display:inline">
+
+                                <button class="primary-button small">
+                                    Call Next
+                                </button>
+
+                            </form>
+
+                            <form
+                                    th:if="${token.status.name()=='CALLED'}"
+                                    th:action="@{/tokens/{id}/start(id=${token.id})}"
+                                    method="post"
+                                    style="display:inline">
+
+                                <button class="primary-button small">
+                                    Start
+                                </button>
+
+                            </form>
+
+                            <form
+                                    th:if="${token.status.name()=='IN_CONSULTATION'}"
+                                    th:action="@{/tokens/{id}/complete(id=${token.id})}"
+                                    method="post"
+                                    style="display:inline">
+
+                                <button class="primary-button small">
+                                    Complete
+                                </button>
+
+                            </form>
+
+                            <form
+                                    th:if="${token.status.name()!='COMPLETED' && token.status.name()!='CANCELLED'}"
+                                    th:action="@{/tokens/{id}/cancel(id=${token.id})}"
+                                    method="post"
+                                    style="display:inline">
+
+                                <button class="secondary-button small">
+                                    Cancel
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

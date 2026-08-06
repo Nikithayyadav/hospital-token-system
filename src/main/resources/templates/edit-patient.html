@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Patient | Yashoda Hospitals</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <h2>✚ Yashoda Hospitals</h2>
+
+            <p>
+                Reception & Patient Services
+            </p>
+
+        </div>
+
+        <div class="menu-section">
+
+            <a th:href="@{/dashboard}"
+               class="menu-item">
+
+                ▣ Dashboard
+
+            </a>
+
+            <a th:href="@{/patients}"
+               class="menu-item active">
+
+                ☷ Patient Directory
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <h3>Edit Patient</h3>
+
+            <a th:href="@{/patients}"
+               class="logout-button">
+
+                ← Patient Directory
+
+            </a>
+
+        </header>
+
+
+        <div class="content">
+
+            <div class="page-heading">
+
+                <div>
+
+                    <div class="page-breadcrumb">
+                        Patient Services / Edit
+                    </div>
+
+                    <h1>Edit Patient Information</h1>
+
+                    <p>
+                        Update the patient's demographic or contact information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="patient-form-card">
+
+                <div class="form-card-header">
+
+                    <div>
+
+                        <h2 th:text="${patient.name}">
+                            Patient
+                        </h2>
+
+                        <p>
+                            Patient ID:
+                            <strong th:text="${patient.patientId}">
+                            </strong>
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form th:action="@{/patients/edit/{id}(id=${patient.id})}"
+                      th:object="${patient}"
+                      method="post">
+
+                    <div class="hospital-form-grid">
+
+                        <div class="form-field full-field">
+
+                            <label>Patient Full Name *</label>
+
+                            <input
+                                    type="text"
+                                    th:field="*{name}"
+                                    required>
+
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>Age *</label>
+
+                            <input
+                                    type="number"
+                                    th:field="*{age}"
+                                    min="0"
+                                    max="120"
+                                    required>
+
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>Gender *</label>
+
+                            <select th:field="*{gender}" required>
+
+                                <option value="Male">Male</option>
+
+                                <option value="Female">
+                                    Female
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>Blood Group</label>
+
+                            <select th:field="*{bloodGroup}">
+
+                                <option value="">Unknown</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>Mobile Number *</label>
+
+                            <input
+                                    type="tel"
+                                    th:field="*{phone}"
+                                    pattern="[0-9]{10}"
+                                    maxlength="10"
+                                    required>
+
+                        </div>
+
+
+                        <div class="form-field full-field">
+
+                            <label>Address</label>
+
+                            <textarea
+                                    th:field="*{address}"
+                                    rows="4">
+                            </textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <a th:href="@{/patients}"
+                           class="secondary-button">
+
+                            Cancel
+
+                        </a>
+
+                        <button
+                                type="submit"
+                                class="primary-button">
+
+                            Save Changes
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

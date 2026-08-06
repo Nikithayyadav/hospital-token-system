@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Reception Dashboard | Yashoda Hospitals</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <!-- =========================================
+         SIDEBAR
+         ========================================= -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="sidebar-logo">✚</div>
+
+            <div>
+                <h2>Yashoda Hospitals</h2>
+                <p>Reception &amp; Patient Services</p>
+            </div>
+
+        </div>
+
+
+        <!-- OVERVIEW -->
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                OVERVIEW
+            </div>
+
+            <a th:href="@{/dashboard}"
+               class="menu-item active">
+                ▣ Dashboard
+            </a>
+
+        </div>
+
+
+        <!-- PATIENTS -->
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                PATIENTS
+            </div>
+
+            <a th:href="@{/patients/register}"
+               class="menu-item">
+                ＋ Register Patient
+            </a>
+
+            <a th:href="@{/patients}"
+               class="menu-item">
+                ⌕ Search Patient
+            </a>
+
+            <a th:href="@{/patients}"
+               class="menu-item">
+                ☷ Patient Directory
+            </a>
+
+        </div>
+
+
+        <!-- TOKENS -->
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                TOKENS
+            </div>
+
+            <a th:href="@{/tokens/generate}"
+               class="menu-item">
+                🎫 Generate Token
+            </a>
+
+            <a th:href="@{/tokens/emergency}"
+               class="menu-item">
+                ⚠ Emergency Token
+            </a>
+
+        </div>
+
+
+        <!-- QUEUES -->
+
+
+
+
+        <!-- CLINICAL -->
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                CLINICAL
+            </div>
+
+            <a th:href="@{/doctors}"
+               class="menu-item">
+                ♟ Doctor Availability
+            </a>
+
+
+
+        </div>
+
+
+        <!-- ACCOUNT -->
+
+        <div class="menu-section account-menu">
+
+            <div class="menu-title">
+                ACCOUNT
+            </div>
+
+            <a th:href="@{/logout}"
+               class="menu-item">
+                ↪ Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================================
+         MAIN CONTENT
+         ========================================= -->
+
+    <main class="main-content">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div class="topbar-title">
+
+                <h3>
+                    Reception Dashboard
+                </h3>
+
+                <span>
+                    Patient Services
+                </span>
+
+            </div>
+
+
+            <div class="topbar-user">
+
+                <div class="staff-avatar">
+                    R
+                </div>
+
+                <div>
+
+                    <strong>
+                        Reception Desk
+                    </strong>
+
+                    <span>
+                        Staff Console
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================================
+             DASHBOARD CONTENT
+             ========================================= -->
+
+        <div class="content compact-dashboard">
+
+
+            <!-- WELCOME -->
+
+            <div class="dashboard-welcome">
+
+                <div>
+
+                    <div class="page-breadcrumb">
+                        Yashoda Hospitals / Reception
+                    </div>
+
+                    <h1>
+                        Patient Services Dashboard
+                    </h1>
+
+                    <p>
+                        Monitor today's patients, consultation tokens
+                        and doctor availability.
+                    </p>
+
+                </div>
+
+
+                <div class="system-status">
+
+                    <span class="status-dot"></span>
+
+                    System Operational
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 KPI CARDS
+                 ========================================= -->
+
+            <div class="stats-grid compact-stats">
+
+
+                <!-- TOTAL PATIENTS -->
+
+                <div class="stat-card compact-stat-card">
+
+                    <div class="stat-icon-box">
+                        👥
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span class="stat-label">
+                            Total Patients
+                        </span>
+
+                        <div class="stat-value"
+                             th:text="${totalPatients}">
+                            0
+                        </div>
+
+                        <span class="stat-description">
+                            Active records
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- WAITING -->
+
+                <div class="stat-card compact-stat-card">
+
+                    <div class="stat-icon-box">
+                        ◷
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span class="stat-label">
+                            Waiting Now
+                        </span>
+
+                        <div class="stat-value"
+                             th:text="${waitingCount}">
+                            0
+                        </div>
+
+                        <span class="stat-description">
+                            Normal queue
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMERGENCY -->
+
+                <div class="stat-card compact-stat-card emergency-stat">
+
+                    <div class="stat-icon-box emergency-icon-box">
+                        ⚠
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span class="stat-label">
+                            Emergency
+                        </span>
+
+                        <div class="stat-value"
+                             th:text="${emergencyCount}">
+                            0
+                        </div>
+
+                        <span class="stat-description">
+                            Priority queue
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DOCTORS -->
+
+                <div class="stat-card compact-stat-card">
+
+                    <div class="stat-icon-box">
+                        ♟
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span class="stat-label">
+                            Available Doctors
+                        </span>
+
+                        <div class="stat-value"
+                             th:text="${availableDoctors}">
+                            0
+                        </div>
+
+                        <span class="stat-description">
+                            Ready for consultation
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+
+            <!-- =========================================
+                 RECEPTION OVERVIEW
+                 ========================================= -->
+
+            <div class="dashboard-bottom-grid">
+
+
+                <!-- TODAY'S QUEUE -->
+
+                <div class="dashboard-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h2>
+                                Today's Queue
+                            </h2>
+
+                            <p>
+                                Current reception workload
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="queue-summary">
+
+
+                        <div class="queue-summary-item">
+
+                            <div class="queue-summary-icon">
+                                ◷
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Normal Waiting
+                                </span>
+
+                                <strong th:text="${waitingCount}">
+                                    0
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="queue-summary-item">
+
+                            <div class="queue-summary-icon emergency-small">
+                                ⚠
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Emergency
+                                </span>
+
+                                <strong th:text="${emergencyCount}">
+                                    0
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel-note">
+                        Quick access to queue and patient token controls is available via Queue Management.
+                    </div>
+
+                    <div class="panel-actions">
+                        <a th:href="@{/tokens/queue}" class="panel-button">Open Queue Management →</a>
+                    </div>
+
+                </div>
+
+
+                <!-- DOCTOR STATUS -->
+
+                <div class="dashboard-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h2>
+                                Doctor Availability
+                            </h2>
+
+                            <p>
+                                Current consultation capacity
+                            </p>
+
+                        </div>
+
+                        <a th:href="@{/doctors}"
+                           class="panel-link">
+                            View Doctors →
+                        </a>
+
+                    </div>
+
+
+                    <div class="doctor-summary">
+
+                        <div class="doctor-availability-number"
+                             th:text="${availableDoctors}">
+                            0
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Doctors Available
+                            </strong>
+
+                            <p>
+                                Currently accepting consultations
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <a th:href="@{/doctors}"
+                       class="panel-button">
+                        Check Doctor Availability
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

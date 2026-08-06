@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Generate Token | Yashoda Hospitals
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <h2>
+                ✚ Yashoda Hospitals
+            </h2>
+
+            <p>
+                Reception & Patient Services
+            </p>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                OVERVIEW
+            </div>
+
+            <a th:href="@{/dashboard}"
+               class="menu-item">
+
+                ▣ Dashboard
+
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                PATIENT SERVICES
+            </div>
+
+            <a th:href="@{/patients/register}"
+               class="menu-item">
+
+                ＋ Register Patient
+
+            </a>
+
+            <a th:href="@{/patients}"
+               class="menu-item">
+
+                ⌕ Search Patient
+
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                TOKEN SERVICES
+            </div>
+
+            <a th:href="@{/tokens/generate}"
+               class="menu-item active">
+
+                🎫 Generate Token
+
+            </a>
+
+            <a th:href="@{/tokens/queue}"
+               class="menu-item">
+
+                ◷ Queue Management
+
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                QUEUE MANAGEMENT
+            </div>
+
+            <a th:href="@{/tokens/queue}"
+               class="menu-item">
+
+                ◷ Queue Management
+
+            </a>
+
+        </div>
+
+
+        <div class="menu-section">
+
+            <div class="menu-title">
+                CLINICAL
+            </div>
+
+            <a th:href="@{/doctors}"
+               class="menu-item">
+
+                ♟ Doctor Availability
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <h3>
+                Token Generation
+            </h3>
+
+            <a th:href="@{/dashboard}"
+               class="logout-button">
+
+                ← Dashboard
+
+            </a>
+
+        </header>
+
+
+        <div class="content">
+
+            <div class="page-heading">
+
+                <div>
+
+                    <div class="page-breadcrumb">
+                        Token Services / Generate Token
+                    </div>
+
+                    <h1>
+                        Generate Consultation Token
+                    </h1>
+
+                    <p>
+                        Assign a registered patient to
+                        an available doctor.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div th:if="${error}"
+                 class="token-error">
+
+                <strong>
+                    Token could not be generated.
+                </strong>
+
+                <span th:text="${error}">
+                </span>
+
+            </div>
+
+
+            <div class="token-workspace">
+
+
+                <!-- LEFT SIDE -->
+
+                <div class="token-form-card">
+
+                    <div class="form-card-header">
+
+                        <div>
+
+                            <h2>
+                                Consultation Details
+                            </h2>
+
+                            <p>
+                                Select patient, department
+                                and doctor.
+                            </p>
+
+                        </div>
+
+                        <div class="normal-token-badge">
+                            NORMAL TOKEN
+                        </div>
+
+                    </div>
+
+
+                      <form th:action="@{/tokens/generate-any}"
+                          method="post">
+
+
+                        <div class="form-section-title">
+                            Patient
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>
+                                Registered Patient *
+                            </label>
+
+                            <select name="patientId"
+                                    required>
+
+                                <option value="">
+                                    Select patient
+                                </option>
+
+                                <option
+                                        th:each="patient : ${patients}"
+                                        th:value="${patient.id}"
+                                        th:text="${patient.patientId + ' — ' + patient.name + ' — ' + patient.phone}">
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <div class="form-section-title second-section">
+                            Consultation Type
+                        </div>
+
+                        <div class="form-field">
+
+                            <label>
+                                Type
+                            </label>
+
+                            <select name="consultationType" id="genConsultationType" onchange="toggleGenPriority()">
+                                <option value="NORMAL">NORMAL</option>
+                                <option value="EMERGENCY">EMERGENCY</option>
+                            </select>
+
+                        </div>
+
+                        <div class="form-section-title second-section">
+                            Department
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>
+                                Department
+                            </label>
+
+                            <select id="departmentSelect"
+                                    onchange="filterDepartment()">
+
+                                <option value="">
+                                    All Departments
+                                </option>
+
+                                <option
+                                        th:each="department : ${departments}"
+                                        th:value="${department.id}"
+                                        th:text="${department.name}"
+                                        th:selected="${selectedDepartment != null && selectedDepartment == department.id}">
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-section-title second-section">
+                            Doctor
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>
+                                Select Doctor *
+                            </label>
+
+                            <select name="doctorId"
+                                    required>
+
+                                <option value="">
+                                    Select doctor
+                                </option>
+
+                                <option
+                                        th:each="doctor : ${doctors}"
+                                        th:value="${doctor.id}"
+                                        th:disabled="${!doctor.canAcceptPatient()}"
+                                        th:text="${doctor.name
+                                            + ' — '
+                                            + doctor.specialization
+                                            + ' — '
+                                            + doctor.status
+                                            + ' — Waiting: '
+                                            + doctor.currentWaitingCount}">
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-section-title second-section">
+                            Visit Information
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>
+                                Reason for Visit *
+                            </label>
+
+                            <textarea
+                                    name="reasonForVisit"
+                                    rows="4"
+                                    maxlength="500"
+                                    placeholder="Enter reason for consultation"
+                                    required>
+                            </textarea>
+
+                        </div>
+
+
+                        <div class="form-actions">
+
+                            <a th:href="@{/dashboard}"
+                               class="secondary-button">
+
+                                Cancel
+
+                            </a>
+
+                            <button type="submit"
+                                    class="primary-button">
+
+                                Register Token
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <!-- RIGHT SIDE -->
+
+                <div class="token-info-panel">
+
+                    <div class="info-panel-icon">
+                        🎫
+                    </div>
+
+                    <h3>
+                        Normal Consultation
+                    </h3>
+
+                    <p>
+                        Normal consultation tokens are
+                        processed according to the
+                        doctor's waiting queue.
+                    </p>
+
+
+                    <div class="token-rule">
+
+                        <span>Queue Type</span>
+
+                        <strong>
+                            FIFO
+                        </strong>
+
+                    </div>
+
+
+                    <div class="token-rule">
+
+                        <span>Collection</span>
+
+                        <strong>
+                            Queue / LinkedList
+                        </strong>
+
+                    </div>
+
+
+                    <div class="token-rule">
+
+                        <span>Doctor Check</span>
+
+                        <strong>
+                            Required
+                        </strong>
+
+                    </div>
+
+
+                    <div class="token-rule">
+
+                        <span>Daily Capacity</span>
+
+                        <strong>
+                            Enforced
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    function filterDepartment() {
+
+        const departmentId =
+            document.getElementById(
+                "departmentSelect"
+            ).value;
+
+        if (departmentId === "") {
+
+            window.location.href =
+                "/tokens/generate";
+
+        } else {
+
+            window.location.href =
+                "/tokens/generate?departmentId="
+                + departmentId;
+        }
+    }
+
+    function toggleGenPriority() {
+        const type = document.getElementById('genConsultationType').value;
+        // if emergency, redirect to emergency page or show priority - keep simple: ensure priority field exists in doctor selection page
+    }
+
+</script>
+
+</body>
+</html>
