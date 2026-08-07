@@ -8,7 +8,7 @@
         <version>4.1.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.hospital</groupId>
+    <groupId>com.hospital</groupId> 
     <artifactId>hospital-token-system</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>hospital-token-system</name>
